@@ -1,4 +1,4 @@
-package com.zerobase.cms.user.client.config;
+package com.zerobase.cms.user.config;
 
 import feign.auth.BasicAuthRequestInterceptor;
 import org.springframework.beans.factory.annotation.Qualifier;

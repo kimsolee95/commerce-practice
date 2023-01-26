@@ -1,14 +1,13 @@
-package com.zerobase.cms.user.client.service;
+package com.zerobase.cms.user.service;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import com.zerobase.cms.user.client.domain.SignUpForm;
-import com.zerobase.cms.user.client.domain.model.Customer;
+import com.zerobase.cms.user.domain.SignUpForm;
+import com.zerobase.cms.user.domain.model.Customer;
 import java.time.LocalDate;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.util.Assert;
 
 @SpringBootTest
 class SignUpCustomerServiceTest {
@@ -27,8 +26,8 @@ class SignUpCustomerServiceTest {
         .phone("01044443333")
         .build();
 
-    Customer c = service.signUpCustomerService(form);
-    assertNotNull(service.signUpCustomerService(form).getId() != null);
+    Customer c = service.signUp(form);
+    assertNotNull(service.signUp(form).getId() != null);
   }
 
 }
