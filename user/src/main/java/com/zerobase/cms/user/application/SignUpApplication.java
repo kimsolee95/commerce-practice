@@ -19,6 +19,10 @@ public class SignUpApplication {
   private final MailgunClient mailgunClient;
   private final SignUpCustomerService signUpCustomerService;
 
+  public void customerVerify(String email, String code) {
+    signUpCustomerService.verifyEmail(email, code);
+  }
+
   public String customerSignUp(SignUpForm form) {
 
     if (signUpCustomerService.isEmailExist(form.getEmail())) {
@@ -49,7 +53,7 @@ public class SignUpApplication {
 
     StringBuilder builder = new StringBuilder();
     return builder.append("Hello ").append(name).append("! Please Click Link for verification. \n\n")
-        .append("http://localhost:8080/customer/signup/verify?email=")
+        .append("http://localhost:8081/customer/verify/signup?email=")
         .append(email)
         .append("&code=")
         .append(code).toString();
