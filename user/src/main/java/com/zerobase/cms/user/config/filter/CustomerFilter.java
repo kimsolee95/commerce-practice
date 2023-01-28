@@ -20,7 +20,6 @@ public class CustomerFilter implements Filter {
   private final JwtAuthenticationProvider jwtAuthenticationProvider;
   private final CustomerService customerService;
 
-
   @Override
   public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
       throws IOException, ServletException {
@@ -33,8 +32,9 @@ public class CustomerFilter implements Filter {
 
     UserVo vo = jwtAuthenticationProvider.getUserVo(token);
     customerService.findByIdAndEmail(vo.getId(), vo.getEmail()).orElseThrow(
-        () -> new SecurityException("Invalid access")
+        () -> new ServletException("Invalid access")
     );
 
+    chain.doFilter(request, response);
   }
 }

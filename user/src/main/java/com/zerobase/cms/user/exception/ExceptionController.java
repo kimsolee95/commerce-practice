@@ -1,5 +1,6 @@
 package com.zerobase.cms.user.exception;
 
+import javax.servlet.ServletException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +13,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @Slf4j
 public class ExceptionController {
 
-
   @ExceptionHandler({
       CustomException.class
   })
@@ -20,7 +20,6 @@ public class ExceptionController {
     log.warn("api Exception: {}", c.getErrorCode());
     return ResponseEntity.badRequest().body(new ExceptionResponse(c.getMessage(), c.getErrorCode()));
   }
-
 
   @Getter
   @AllArgsConstructor
