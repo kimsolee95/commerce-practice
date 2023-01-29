@@ -4,7 +4,7 @@ import com.zerobase.cms.user.domain.SignInForm;
 import com.zerobase.cms.user.domain.model.Customer;
 import com.zerobase.cms.user.exception.CustomException;
 import com.zerobase.cms.user.exception.ErrorCode;
-import com.zerobase.cms.user.service.CustomerService;
+import com.zerobase.cms.user.service.customer.CustomerService;
 import com.zerobase.domain.config.JwtAuthenticationProvider;
 import com.zerobase.domain.domain.common.UserType;
 import lombok.RequiredArgsConstructor;
