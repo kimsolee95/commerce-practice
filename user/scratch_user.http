@@ -1,0 +1,28 @@
+### 회원가입 ( 고객 )
+POST http://localhost:8081/signup/customer
+Content-Type: application/json
+
+{
+  "birth": "2002-01-01",
+  "email": "ahhasolee@naver.com",
+  "name": "kimtest",
+  "phone": "01055556666"
+}
+
+### 이메일 인증 ( 고객 )
+
+### 로그인 ( 고객 )
+
+
+### 회원 정보 조회 ( 고객 )
+
+
+### 잔액 변경 ( 고객 )
+
+
+#####################################
+
+
+### 회원가입 ( 셀러 )
+
+### 로그인 ( 셀러 )
