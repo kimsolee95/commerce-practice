@@ -25,6 +25,7 @@ public class SignUpSellerService {
     return sellerRepository.findByEmail(email).isPresent();
   }
 
+  @Transactional
   public void verifyEmail(String email, String code) {
 
     Seller seller = sellerRepository.findByEmail(email)
