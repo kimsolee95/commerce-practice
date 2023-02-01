@@ -5,6 +5,7 @@ import com.zerobase.cms.order.domain.model.ProductItem;
 import com.zerobase.cms.order.domain.product.AddProductForm;
 import com.zerobase.cms.order.domain.product.UpdateProductForm;
 import com.zerobase.cms.order.domain.product.UpdateProductItemForm;
+import com.zerobase.cms.order.domain.repository.ProductItemRepository;
 import com.zerobase.cms.order.domain.repository.ProductRepository;
 import com.zerobase.cms.order.exception.CustomException;
 import com.zerobase.cms.order.exception.ErrorCode;
@@ -17,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class ProductService {
 
   private final ProductRepository productRepository;
+  private final ProductItemRepository productItemRepository;
 
   @Transactional
   public Product addProduct(Long sellerId, AddProductForm form) {
@@ -42,5 +44,14 @@ public class ProductService {
     }
     return product;
   }
+
+  @Transactional
+  public void deleteProduct(Long sellerId, Long productId) {
+
+    Product product = productRepository.findBySellerIdAndId(sellerId, productId)
+        .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_PRODUCT));
+    productRepository.delete(product);
+  }
+
 
 }

@@ -40,7 +40,7 @@ public class ProductItem extends BaseEntity {
   private Integer count;
 
   //양방향 매핑 (product 내에서도 productItem을 참조)
-  @ManyToOne(cascade = CascadeType.ALL)
+  @ManyToOne
   @JoinColumn(name = "product_id")
   private Product product;
 
