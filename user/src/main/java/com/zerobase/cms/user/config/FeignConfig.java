@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 public class FeignConfig {
 
   @Value(value = "${mailgun.key}")
-  private String mailgunKey; //1de076a33ab42a7d21638b1220080887-c9746cf8-5ad99928
+  private String mailgunKey;
 
   @Qualifier(value = "mailgun")
   @Bean

@@ -46,7 +46,9 @@ public class CartApplication {
   }
 
   public Cart getCart(Long customerId) {
+
     Cart cart = refreshCart(cartService.getCart(customerId));
+    cartService.putCart(cart.getCustomerId(), cart);
 
     Cart returnCart = new Cart();
     returnCart.setCustomerId(customerId);
@@ -65,7 +67,7 @@ public class CartApplication {
   }
 
   //장바구니 상품 추가 후, 상품 가격 or 수량 변동에 대한 처리
-  private Cart refreshCart(Cart cart) {
+  protected Cart refreshCart(Cart cart) {
 
     //1. 상품이나 상품 아이템 정보, 가격, 수량이 변경되었는지 체크 -> 그에 맞는 알람 고객에게 제공
     //2. 상품 수량, 가격을 임의로 변경.
@@ -142,7 +144,7 @@ public class CartApplication {
       }
     }
 
-    cartService.putCart(cart.getCustomerId(), cart);
+//    cartService.putCart(cart.getCustomerId(), cart);
     return cart;
   }
 
