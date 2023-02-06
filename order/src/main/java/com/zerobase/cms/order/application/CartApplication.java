@@ -39,6 +39,12 @@ public class CartApplication {
     return cartService.addCart(customerId, form);
   }
 
+  public Cart updateCart(Long customerId, Cart cart) {
+    //상품의 삭제, 수량 변경이 일어나기 때문에 get Cart 호출
+    cartService.putCart(customerId, cart);
+    return getCart(customerId);
+  }
+
   public Cart getCart(Long customerId) {
     Cart cart = refreshCart(cartService.getCart(customerId));
 
