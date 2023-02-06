@@ -21,5 +21,6 @@ public interface UserClient {
       @RequestBody ChangeBalanceForm form);
 
   @PostMapping("/customer/order/history-mail")
-  public ResponseEntity<String> sendOrderHistoryMail(@RequestHeader(name = "X-AUTH-TOKEN") String token, @RequestBody OrderHistoryMailInfoForm form);
+  ResponseEntity<String> sendOrderHistoryMail(@RequestHeader(name = "X-AUTH-TOKEN") String token,
+      @RequestBody OrderHistoryMailInfoForm form);
 }
