@@ -1,7 +1,10 @@
 package com.zerobase.cms.user.controller;
 
+import com.zerobase.cms.user.application.OrderHistoryApplication;
+import com.zerobase.cms.user.domain.SignUpForm;
 import com.zerobase.cms.user.domain.customer.ChangeBalanceForm;
 import com.zerobase.cms.user.domain.customer.CustomerDto;
+import com.zerobase.cms.user.domain.customer.OrderHistoryMailInfoForm;
 import com.zerobase.cms.user.domain.model.Customer;
 import com.zerobase.cms.user.exception.CustomException;
 import com.zerobase.cms.user.exception.ErrorCode;
@@ -27,6 +30,7 @@ public class CustomerController {
   private final JwtAuthenticationProvider provider;
   private final CustomerService customerService;
   private final CustomerBalanceService customerBalanceService;
+  private final OrderHistoryApplication orderHistoryApplication;
 
   @GetMapping("/getInfo")
   public ResponseEntity<CustomerDto> getInfo(@RequestHeader(name = "X-AUTH-TOKEN") String token) {
@@ -42,6 +46,12 @@ public class CustomerController {
                                                 @RequestBody ChangeBalanceForm form) {
     UserVo vo = provider.getUserVo(token);
     return ResponseEntity.ok(customerBalanceService.changeBalance(vo.getId(), form).getCurrentMoney());
+  }
+
+  @PostMapping("/order/history-mail")
+  public ResponseEntity<String> sendOrderHistoryMail(@RequestHeader(name = "X-AUTH-TOKEN") String token,
+      @RequestBody OrderHistoryMailInfoForm form) {
+    return ResponseEntity.ok(orderHistoryApplication.sendOrderHistoryMail(form));
   }
 
 }

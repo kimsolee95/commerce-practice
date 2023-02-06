@@ -20,6 +20,11 @@ public class ProductItemService {
   private final ProductItemRepository productItemRepository;
 
   @Transactional
+  public ProductItem getProductItem(Long id) {
+    return productItemRepository.getReferenceById(id); //getById(id);
+  }
+
+  @Transactional
   public Product addProductItem(Long sellerId, AddProductItemForm form) {
 
     Product product = productRepository.findBySellerIdAndId(sellerId, form.getProductId())
