@@ -14,7 +14,8 @@ public enum ErrorCode {
   CART_CHANGE_FAIL(HttpStatus.BAD_REQUEST, "장바구니에 추가할 수 없습니다."),
   ITEM_COUNT_NOT_ENOUGH(HttpStatus.BAD_REQUEST, "상품의 수량이 부족합니다."),
   ORDER_FAIL_CHECK_CART(HttpStatus.BAD_REQUEST, "주문 불가합니다. 장바구니를 확인해주세요."),
-  ORDER_FINAL_NO_MONEY(HttpStatus.BAD_REQUEST, "주문 불가합니다. 잔액이 부족합니다.");
+  ORDER_FINAL_NO_MONEY(HttpStatus.BAD_REQUEST, "주문 불가합니다. 잔액이 부족합니다."),
+  ORDER_FAIL_PAYMENT_ERROR(HttpStatus.BAD_REQUEST, "주문 불가합니다. 결제 오류로 인해 잔액이 결제되지 않았습니다.");
 
   private final HttpStatus httpStatus;
   private final String detail;

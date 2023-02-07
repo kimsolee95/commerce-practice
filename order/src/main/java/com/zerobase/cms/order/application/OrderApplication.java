@@ -6,11 +6,15 @@ import com.zerobase.cms.order.client.user.CustomerDto;
 import com.zerobase.cms.order.client.user.OrderHistoryMailInfoForm;
 import com.zerobase.cms.order.domain.model.ProductItem;
 import com.zerobase.cms.order.domain.redis.Cart;
+import com.zerobase.cms.order.domain.repository.ProductItemRepository;
 import com.zerobase.cms.order.exception.CustomException;
 import com.zerobase.cms.order.exception.ErrorCode;
 import com.zerobase.cms.order.service.ProductItemService;
 import java.util.stream.IntStream;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +25,7 @@ public class OrderApplication {
   private final CartApplication cartApplication;
   private final UserClient userClient;
   private final ProductItemService productItemService;
+  private final ProductItemRepository productItemRepository;
 
   @Transactional
   public void order(String token, Cart cart) {
@@ -44,8 +49,16 @@ public class OrderApplication {
     }
 
     //transaction rollback 처리 어떻게?
-    userClient.changeBalance(token,
+    //1. feign 결과값 에 따라서 상품 엔티티를 변경하도록 한다. (1. api 호출 status value 200인가? 2. 호출 후의 유저의 잔액 값 + 다시 DB로 조회해서 가져온 잔액 값 동일할 때만 상품어아탬 더티체킹 수행)
+    ResponseEntity<Integer> responseChangeBalance = userClient.changeBalance(token,
         ChangeBalanceForm.builder().from("USER").message("Order").money(-totalPrice).build());
+    CustomerDto changedCustomerDto = userClient.getCustomerInfo(token).getBody();
+
+    //wrapper 값 간의 비교는 equals로 해야 값을 비교 한다. (!=은 주소값 비교가 되기 때문에 숫자값의 동일함을 비교하지 못한다.)
+    if (!responseChangeBalance.getBody().equals(changedCustomerDto.getBalance())
+        || responseChangeBalance.getStatusCodeValue() != 200) {
+      throw new CustomException(ErrorCode.ORDER_FAIL_PAYMENT_ERROR);
+    }
 
     StringBuilder productStringBuilder = new StringBuilder();
 
