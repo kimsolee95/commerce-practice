@@ -31,6 +31,10 @@ public class CartService {
     return cart;
   }
 
+  public void deleteCart(Long customerId) {
+    redisClient.delete(customerId);
+  }
+
   public Cart addCart(Long customerId, AddProductCartForm form) {
 
     Cart cart = redisClient.get(customerId, Cart.class);

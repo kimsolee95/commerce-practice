@@ -9,7 +9,9 @@ import com.zerobase.cms.order.domain.redis.Cart;
 import com.zerobase.cms.order.domain.repository.ProductItemRepository;
 import com.zerobase.cms.order.exception.CustomException;
 import com.zerobase.cms.order.exception.ErrorCode;
+import com.zerobase.cms.order.service.CartService;
 import com.zerobase.cms.order.service.ProductItemService;
+import java.util.Objects;
 import java.util.stream.IntStream;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
@@ -25,7 +27,7 @@ public class OrderApplication {
   private final CartApplication cartApplication;
   private final UserClient userClient;
   private final ProductItemService productItemService;
-  private final ProductItemRepository productItemRepository;
+  private final CartService cartService;
 
   @Transactional
   public void order(String token, Cart cart) {
@@ -73,12 +75,16 @@ public class OrderApplication {
       }
     }
 
+    //redis cache delete
+    Cart redisCart = cartService.getCart(customerDto.getId());
+    if (Objects.equals(redisCart, cart)) {
+      //1. 주문 메서드 인자 값인 cart와 고객의 장바구니 레디스캐시 데이터 값이 똑같다면 redis cache를 지운다.
+      cartService.deleteCart(customerDto.getId());
+    }
+
     //mail send
-    userClient.sendOrderHistoryMail(token,
-        OrderHistoryMailInfoForm.builder()
-            .email(customerDto.getEmail())
-            .itemName(productStringBuilder.toString())
-            .money(totalPrice).build());
+    String itemName = productStringBuilder.toString();
+//    sendOrderHistoryMail(token, customerDto, itemName, totalPrice);
   }
 
   private Integer getTotalPrice(Cart cart) {
@@ -87,5 +93,13 @@ public class OrderApplication {
         .sum();
   }
 
+  private void sendOrderHistoryMail(String token, CustomerDto customerDto, String itemName, Integer totalPrice) {
+    //mail send
+    userClient.sendOrderHistoryMail(token,
+        OrderHistoryMailInfoForm.builder()
+            .email(customerDto.getEmail())
+            .itemName(itemName)
+            .money(totalPrice).build());
+  }
 
 }
