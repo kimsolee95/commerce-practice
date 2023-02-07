@@ -53,4 +53,8 @@ public class RedisClient {
     }
   }
 
+  public void delete(Long key) {
+    redisTemplate.delete(key.toString());
+  }
+
 }
