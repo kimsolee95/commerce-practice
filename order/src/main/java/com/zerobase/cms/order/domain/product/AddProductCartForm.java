@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class AddProductCartForm {
 
-  private Long id;
+  private Long id; //상품 id
   private Long sellerId;
   private String name;
   private String description;

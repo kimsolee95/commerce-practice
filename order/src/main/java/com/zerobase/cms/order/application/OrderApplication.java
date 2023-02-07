@@ -6,15 +6,15 @@ import com.zerobase.cms.order.client.user.CustomerDto;
 import com.zerobase.cms.order.client.user.OrderHistoryMailInfoForm;
 import com.zerobase.cms.order.domain.model.ProductItem;
 import com.zerobase.cms.order.domain.redis.Cart;
-import com.zerobase.cms.order.domain.repository.ProductItemRepository;
 import com.zerobase.cms.order.exception.CustomException;
 import com.zerobase.cms.order.exception.ErrorCode;
 import com.zerobase.cms.order.service.CartService;
 import com.zerobase.cms.order.service.ProductItemService;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 import java.util.stream.IntStream;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -75,16 +75,12 @@ public class OrderApplication {
       }
     }
 
-    //redis cache delete
-    Cart redisCart = cartService.getCart(customerDto.getId());
-    if (Objects.equals(redisCart, cart)) {
-      //1. 주문 메서드 인자 값인 cart와 고객의 장바구니 레디스캐시 데이터 값이 똑같다면 redis cache를 지운다.
-      cartService.deleteCart(customerDto.getId());
-    }
+    //redis cart data delete
+    cartService.deleteCartAfterOrderCompleted(customerDto, orderCart);
 
     //mail send
     String itemName = productStringBuilder.toString();
-//    sendOrderHistoryMail(token, customerDto, itemName, totalPrice);
+    sendOrderHistoryMail(token, customerDto, itemName, totalPrice);
   }
 
   private Integer getTotalPrice(Cart cart) {
